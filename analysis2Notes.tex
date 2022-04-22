@@ -1,0 +1,419 @@
+\documentclass[a4paper]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage{amssymb, amsfonts, latexsym, amsthm, amsmath, framed}
+\usepackage{esvect}
+
+\usepackage{amsmath, amssymb, framed, tcolorbox}
+\tcbuselibrary{theorems}
+
+\usepackage[hidelinks,colorlinks=true,linkcolor=blue,citecolor=blue]{hyperref}
+
+\newcommand{\ba}{\backslash}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\F}{\mathbb{F}}
+\newcommand{\rank}{\text{rank}}
+
+\usepackage{amstext}
+\usepackage{array}
+\newcolumntype{L}{>{$}c<{$}}
+
+% figure support
+\usepackage{import}
+\usepackage{xifthen}
+\pdfminorversion=7
+\usepackage{pdfpages}
+\usepackage{transparent}
+\newcommand{\incfig}[1]{%
+	\def\svgwidth{\columnwidth}
+	\import{./figures/}{#1.pdf_tex}
+}
+\newcounter{mytheorem}[section] \def\themytheorem{\thesection.\arabic{mytheorem}}
+
+\definecolor{my-yellow}{cmyk}{0,0.2,0.7,0,1.00}
+\definecolor{my-blue}{cmyk}{0.80, 0.13, 0.14, 0.04, 1.00}
+\definecolor{my-green}{cmyk}{0.4,0,0.4,0,1.00}
+\tcbset{
+defstyle/.style={fonttitle=\bfseries\upshape, colback=my-yellow!5,colframe=my-yellow!80!black}, 
+theostyle/.style={fonttitle=\bfseries\upshape, colback=my-blue!5,colframe=my-blue!80!black},
+corstyle/.style={fonttitle=\bfseries\upshape, colback=my-green!5,colframe=my-green!80!black},
+}
+
+\tcbmaketheorem{Definition}{Definition}{defstyle}{mytheorem}{def}
+\tcbmaketheorem{Theorem}{Theorem}{theostyle}{mytheorem}{theo}
+\tcbmaketheorem{Corollary}{Corollary}{corstyle}{mytheorem}{cor}
+\tcbmaketheorem{Example}{Example}{corstyle}{mytheorem}{eg}
+
+\pdfsuppresswarningpagegroup=1
+
+\title{Analysis 2 Functional Analysis}
+\author{Yuxuan Sun}
+\date{Spring 2022}
+
+\begin{document}
+\maketitle
+\tableofcontents
+
+\newpage
+
+\section{Basics}
+\begin{Definition}{characteristic function}{}
+Given $S \subset \R$, the corresponding characteristic function is \[
+	\chi_S(x) = \begin{cases}
+		1 & x \in S \\
+		0 & x \in S^C
+	\end{cases}
+\] 	
+\end{Definition}
+
+\begin{Definition}{Lebesgue integral of step function}{}
+	Given a step function \[
+	f(x)=c_{1} \chi_{I_{1}}(x)+c_{2} \chi_{I_{2}}(x)+\ldots+c_{n} \chi_{I_{n}}(x)
+	\] We define its Lebesgue integral to be \[
+	\int_{-m}^{\infty} f(x) d x=c_{1} m\left(I_{1}\right)+c_{2} m\left(I_{2}\right)+\cdots+c_{n} m\left(I_{n}\right)
+	\] 
+\end{Definition}
+
+\section{L1}
+\begin{Definition}{$L^1{\R}$}{l1}
+	We say $f:\R\to \R$ is in $L^2(\R)$ if there are functions  $g,h \in  L^0(\R)$ s.t. $f=g-h$
+	\[\int_{-\infty}^{\infty} f(x)dx = \int_{-\infty}^{\infty} g(x)dx - \int_{-\infty}^{\infty} h(x)dx    
+\]
+\end{Definition}
+\begin{Theorem}{$L^1(\R)$ is a vector space}{l1Vector}
+	If $f_1,f_2\in L^1(\R)$ and $c_1,c_2$ are real constancts, then $c_1f_1+c_2f_2 \in L^1(\R)$
+\end{Theorem}
+\begin{Theorem}{$L^1(\R)$ order integral}{l1Order}
+	If $f_1,f_2 \in  L^1(\R)$ and $f_1(x) \ge f_2(x)$ for all $x \in \R$, then \[
+		\int_{-\infty}^{\infty} f_1(x) dx \ge \int_{-\infty}^{\infty} f_2(x)dx  
+	.\] 
+\end{Theorem}
+\begin{Definition}{$L^1_{nvs}(\R)$}{l1nvs}
+	An element of $L^1_{nvs}(\R)$ is a collection of functions in $L^1(\R)$: specifically, two functions are in the same collection if they are equal except on a set of measure zero. \\
+	Given a collection  $S$ in  $L^1_{nvs}(\R)$, define $\|S\|_{1}$ by choosing any $f \in  S$ and defining $ \|S\|_{1}=  \|f\|_{1}$
+\end{Definition}
+
+\begin{Theorem}{Monotone Convergence Theorem in $L^1$}{monoConvL1}
+	Let $f_n \in L^1(\R)$ which monotone increases for all $x \in \R$.
+
+	Suppose $ \left\{ \int_{-\infty}^{\infty} f_n(x)dx \: n \in \N
+	 \right\} $ is bounded.
+
+	 Then there exists $f \in L^1(\R)$ s.t. $f_n \to f$ pointwise except possibly on a set of measure zero, and 
+	 \[	 \lim_{n \to \infty} \int_{-\infty}^{\infty} f_n(x) dx = \int_{-\infty}^{\infty}f(x)dx \] 
+\end{Theorem}
+
+\begin{Theorem}{$L^1([a,b])$ is complete}{l1abcomplete}
+	If $f_n \in  L^1([a,b])$ is a Cauchy sequence (with resepct to $\|\cdot\|_{1} $). Then there exists $f \in L^1([a,b])$ s.t. $f_n \to f$ in $L^1$
+\end{Theorem}
+
+\begin{Definition}{the spaces $L^p(\R)$}{lp}
+	For $p > 1$, we say that  $f \in L^p(\R)$ if $f$ is a measurable function and  $\int_{-\infty}^{\infty} |f(x)|^p dx  $ is a finite number.
+\end{Definition}
+
+\begin{Theorem}{$L^p(\R)$ is a vector space}{}
+	$L^p(\R)$ is a vector space.
+\end{Theorem}
+
+
+
+\section{$L^1([a,b])$ and Fundamental THeorems of Calculus}
+
+\begin{Definition}{}{}
+	if $f:[a,b] \to \R$, we say that $f \in L^1([a,b])$ if the function \[
+		g(x)=\left\{\begin{array}{ll}
+f(x) & \text { if } x \in[a, b] \\
+0 & \text { otherwise }
+\end{array}\right.
+	\] is in $L^1(\R)$. In that case, we write  $\int_a^b f(x) dx = \int_{-\infty}^{\infty}g(x)dx  $
+	
+\end{Definition}
+
+\section{$L^2$}
+
+\begin{Theorem}{Inner Product on $L^2(\R)$}{}
+	if $f,g \in L^2$, then  $fg \in L^1$ with: \[
+		\int_{-\infty}^{\infty} \left| f(x)g(x) \right| \le  \| f\|_2 \|g\|_2
+	\] 
+\end{Theorem}
+
+\begin{Definition}{Inner product on $L^2$}{}
+	If $f,g \in L^2$, let:  \[
+		\left< f,g \right> - \int_{-\infty}^{\infty} f(x)g(x) dx
+	\] 
+\end{Definition}
+
+\section{Geometry Recap}
+
+\begin{Theorem}{Parallel-gram Law}{}
+	$d_1$ and $d_2$ being the diagnoal an \[
+	s^2 + s^2 + t^2 +t^2 = d_1^2 + d_2^2
+	\] 	
+\end{Theorem}
+
+\begin{Corollary}{inner product}{}
+	$\|\cdot \|_2$ has an inner product that's like the dot product. 
+
+	$\| \cdot \|_p$ and  $\| \cdot \|_{\infty}$ don't have inner product.
+\end{Corollary}
+
+\section{Fourier}
+
+\begin{Example}{orthonormal set}{}
+	i.e. the inner product is 0 \[
+		\frac{1}{\sqrt{2\pi} }, \frac{\sin x}{\sqrt{\pi} }, \frac{\cos x}{\sqrt{\pi}}, \frac{\sin 2x}{\sqrt{2\pi}}, \frac{\cos 2x}{\sqrt{\pi}}
+	\] restricted to domain $\left[ -\pi,\pi \right] $
+\end{Example}
+
+\begin{Definition}{Fourier senes}{}
+	Given  $f \in L^2$, define its Fourier senes as: \[
+		FS_f(x) = \left<f, f_0 \right> f_0(x) + \left<f, f_1 \right> f_1(x) + \left<f, f_2 \right> f_2(x) + \left<f,f_3 \right> f_3(x) + \ldots
+	\]
+\tcblower
+\textbf{Comments}
+
+values of $f$ outside  $\left[ -\pi,\pi \right] $ have no impact on $FS_f$
+
+we could assume  $f = 0$ outside  $\left[ -\pi,\pi \right] $, i.e. $f \in L^2\left( [-\pi,\pi \right) $
+\end{Definition}
+
+\begin{Definition}{inner product in $L^2$}{}
+	Given $f,g \in L^2(\R)$, we define there inner product by: \[
+		\left< f,g \right> = \int_{-\infty}^{\infty} f(x)g(x)dx
+	\] 
+\end{Definition}
+
+\begin{Theorem}{}{}
+	If $f \in L^2\left( \left[ -\pi,\pi \right]  \right) $, $FS_f \to f$ in $L^2$
+\end{Theorem}
+
+\begin{Theorem}{}{}
+	If $f \in C\left( \left[ -\pi,\pi \right]  \right) $ and $f(\pi) = f(-\pi)$, then $FS_f \to f$ uniformly on $\left[ -\pi,\pi \right] $
+\end{Theorem}
+
+\section{Fourier transform}
+
+\begin{Definition}{rapidly decresing}{}
+	$f$ is rapidly decreasing if, for any  $n \in \N$, there exists $M_n, C_n$ s.t. $|f(x)| \leq C_{n} / x^{n}$ for all $x$ with $|x|>M_{n}$. An alternative perspective: $f$ is rapidly decreasing if and only if for any polynomial $p(x)$, we have $\lim _{x \rightarrow \infty} p(x) f(x)=\lim _{x \rightarrow-\infty} p(x) f(x)=0$.
+\end{Definition}
+
+\begin{Definition}{$C^\infty(\R)$}{}
+	$f \in C^\infty(\R)$ is $f$ has infinitely many derivatives at all  $x \in \R$
+\end{Definition}
+
+\begin{Definition}{$S(\R)$}{}
+	$f \in S(\R)$ (Schwartz-class) if $f$ is rapidly decreasing and in  $C^\infty(\R)$
+\tcblower
+$e^{-x^2} \in S(\R)$
+\end{Definition}
+
+\begin{Definition}{$\mathcal{D}([a, b])$}{}
+	$f \in \mathcal{D}([a, b])$ if $C \in C^\infty(\R)$ and $f = 0$ outside of  $\left[ a,b \right] $
+\end{Definition}
+
+\begin{Theorem}{$L^2$ and fourier}{}
+	if $f \in L^2 ([-T,T])$, then \[
+	f(x)=\sum_{n=-\infty}^{\infty} \frac{1}{2 T} C_{n} e^{-i n \pi x / T}
+	\] for \[
+	C_{n}=\int_{-T}^{T} f(x) e^{i n \pi x / T}
+	\] 
+\end{Theorem}
+
+\subsection{crash course in $\C$}
+
+Given a complex-valued function \[
+	f(x) = f_1(x) + i f_2(x)
+\] we would say $f \in L^1(\R), f_1,f_2 \in L^1(\R)$ and its integral to be \[
+\int_{-\infty}^{\infty} f(x) dx = \int_{-\infty}^{\infty} f_1(x)dx + i \int_{-\infty}^{\infty} f_2(x) dx
+\] 
+
+\begin{Theorem}{Dominated Convergence Theorem}{}
+	Given $f_n \in L^1(\R)$ s.t. \begin{itemize}
+		\item $f_n \to f$ except possibly on a set of measure zero
+		\item $\left| f_n(x) \right| \le g(x) $ for a function $g \in L^1(\R)$
+	\end{itemize}
+	Then $f\in L^1(\R)$ and \[
+		\int_{-\infty}^{\infty} f(x) dx = \lim_{n \to \infty}  \int_{-\infty}^{\infty} f_n(x) dx
+	\] 	
+\end{Theorem}
+
+\subsection{Fourier Transform Properties}
+
+\begin{Corollary}{addition}{}
+	For $\tau_y: S(\R) \to S(\R)$ defined by $(\tau_y f)(x) = f(x+y)$ if  $f\in S(\R)$, then \[
+	\widehat{\left(\tau_{y} f\right)}(\omega)=e^{-i \omega y} \hat{f}(\omega)
+	\] 
+	\tcblower
+	Let \[
+		f_n(x) = \begin{cases}
+			f(x+y) e^{i \omega x} & -n \le  x \le n \\
+			0 & \text{otherwise}
+		\end{cases}
+	\] Then $f_n \to  f(x+y) e^{i \omega x}$ pointwise on $\R$, and  \[
+	\left| f_n(x) \right| \le  \left| f(x+y) e^{i \omega x} \right| \le  \left| f(x+y) \right| \cdot 1 
+\] and \[
+\left| f(x+y) \right| \in  L^1(\R)
+\] because $f \in  S(\R)$ its translation is rapidly decreasing as well, so
+\begin{align*}
+	\int_{-\infty}^{\infty} f(x+y) e^{i \omega x} dx &= \int_{-\infty}^{\infty} \lim_{n \to \infty} f_n(x) dx \\
+							  &= \lim_{n \to \infty} \int_{-\infty}^{\infty}  f_n(x) dx \\
+							  &= \lim_{n \to \infty}  \int_{-\infty}^{\infty}  f(x+y) e^{i \omega x} dx \\
+							  &= \lim_{n \to \infty} \int_{-n-y}^{n-y} f(u) e^{i \omega (u-y)} du \\
+							  &= e^{i \omega y} \lim_{n \to \infty} \int_{-n-y}^{n-y} f(u) e^{i \omega u} du \\
+							  &= e^{i \omega y} \int_{-\infty}^{\infty} f(u) e^{i \omega u} du
+\end{align*}
+\end{Corollary}
+
+\begin{Corollary}{derivative}{}
+	If $f \in S(\R)$, then \[
+	\left(\widehat{i \frac{d f}{d x}}\right)(\omega)=\omega \hat{f}(\omega)
+	\] 
+\end{Corollary}
+
+\begin{Corollary}{derivative 2}{}
+	if $f \in S(\R)$ \[
+	\widehat{(x f)}(\omega)=-i \frac{d \hat{f}}{d \omega}(\omega)
+\]
+\end{Corollary}
+
+\begin{Definition}{convolution}{}
+	Given $f,g \in \R \to \R$, their convolution is the function: \[
+	(f * g)(x)=\int_{-\infty}^{\infty} f(x-y) g(y) d y
+\] (for any $x $ such taht the integral exists).
+\end{Definition}
+
+\begin{Corollary}{}{}
+	Given  $y \in \R$, if $f \in S(\R)$, then \[
+		\left( \widehat{e^{ixy} f} \right) \left( \omega \right) = \widehat(f) \left( \omega + y \right) 
+	\] 
+\end{Corollary}
+
+\begin{Corollary}{Property 2}{}
+	if $f \in S(\R)$, then \[
+	\left(\widehat{i \frac{d f}{d x}}\right)(\omega)=\omega \hat{f}(\omega)
+	\] 
+\end{Corollary}
+
+\begin{Corollary}{Property 2a}{}
+	if $f \in S(\R)$, then \[
+	\widehat{(x f)}(\omega)=-i \frac{d \hat{f}}{d \omega}(\omega)
+	\]
+\tcblower
+\textbf{Proof}
+\begin{align*}
+	\text{RHS} &= -i \frac{d}{dw}\left( \int_{-\infty}^{\infty} f(x) e^{iwx} dx \right)\\
+		   &= -i \int_{-\infty}^{\infty} \frac{\partial}{\partial e} \left( f(x) e ^{iwx} \right) dx \\
+		   &= -i \int_{-\infty}^{\infty} f(x) e^{iwx}ix dx  \quad \text{chain rule} \\
+		   &= (-i)i \int_{-\infty}^{\infty} \left( x f(x) \right) e^{iwx} dx \\
+		   &= \widehat{xf}(w)
+\end{align*}
+\end{Corollary}
+
+\begin{Corollary}{Property 3}{}
+	if $f, g \in S(\R)$, then \[
+		\left( \widehat{f * g} \right) \left( \omega \right) = \hat(f)(\omega)\hat(g)(\omega) 
+	\] 
+\end{Corollary}
+
+\begin{Corollary}{Property 3a}{}
+	if $f,g \in S(\R)$, then \[
+		\widehat{\left( fg \right) }\left( \omega \right) = \frac{1}{2\pi}\left( \hat{f} * \hat{g} \right) \left( \omega \right) 
+	\] 
+\end{Corollary}
+
+\begin{Theorem}{Lebiniz Rule}{}
+	if $f, \frac{\partial f}{\partial y}$ are continuous on  $[a,b] \times [c,d]$, the following holds for  $y \in [c,d]$ \[
+	\frac{d}{d y} \int_{a}^{b} f(x, y) d x=\int_{a}^{b} \frac{\partial f}{\partial y}(x, y) d x
+	\] 
+\end{Theorem}
+
+There's a version of the Leibniz Rule that incorporates the Fundamental Theorem: \[
+	\frac{d}{dy} \int_{a(y)}^{b(y)} f(x,y) dx = \int_{a(y)}^{b(y)} \frac{\partial f}{\partial y} (x,y) dx + f(b(y),y) \frac{db}{dy}- f(a(y),y)\frac{da}{dy}
+\] 
+\begin{Definition}{contour integral}{}
+	Given a function $f: \C \to  \C$ and a path $\gamma$ in the plane parametrized as  \[
+	\vec{r}(t)=(x(t), y(t))
+	\] reinterpret it as a path in $\C$:  \[
+	z(t) = x(t) + iy(t)
+	\] Then the integral of $f$ ove the path  $\gamma$ is defined to be 
+\tcblower
+\textbf{$r_1$ integral}
+
+parametrize: $z(t) = t, z'(t) = 1$
+	\[
+	\int_{r_1} f(z) dz = \int_{-R}^{R} e ^{-Bt^2} (1) dt
+	\] 
+
+\textbf{$r_3$ integral}
+
+parametrize $z(t) = -t + \frac{w}{2B} i$ for $-R <t <R$
+ \[
+	 \int_{r_3} f(z) dz = \int_{-R}^R e^{-B(-t + \frac{w}{2B}i)^2 }(-1) dt 
+\] 
+\textbf{$r_2$ integral}
+
+parametrize $z(t) = R+ti$ for  $0 \le t \le  \frac{w}{2B}$ 
+\[
+	\int_{r_2} f(z) dz = \int_0^{\frac{w}{2B}} e^{-B(R+ti)^2} i dt
+\]
+\end{Definition}
+
+
+\begin{Theorem}{contour-integration theorem}
+	ie $f(z)$ is differentiable at every point inside and on a closed path  $\gamma$ (that's a path that returns to where it started), then the integral of  $f$ ove that closed path is zero.
+\end{Theorem} 
+
+
+Here are our Fourier Transform properties so far:
+\begin{center}
+\begin{tabular}{|L|L|}
+\hline \text { Function } & \text { Fourier Transform } \\
+\hline f(x+y) & e^{-i \omega y} \widehat{f}(\omega) \\
+\hline e^{i x y} f(x) & \widehat{f}(\omega+y) \\
+\hline i f^{\prime}(x) & \omega \widehat{f}(\omega) \\
+\hline x f(x) & -i(\widehat{f})^{\prime}(\omega) \\
+\hline(f * g)(x) & \widehat{f}(\omega) \widehat{g}(\omega) \\
+\hline f(x) g(x) & \frac{1}{2 \pi}(\widehat{f} * \widehat{g})(\omega) \\
+\hline A e^{-B x^{2}} & A \sqrt{\frac{\pi}{B}} e^{-\omega^{2} /(4 B)} \\
+\hline
+\end{tabular}
+\end{center}
+
+
+\begin{Definition}{$\delta$-sequence}{}
+	We call $f_n \in L^1(\R)$ a $\delta$-sequence if
+
+	$\int_{-\infty}^{\infty} f_n(x)dx = 1$ for all $n$
+
+	for all  $r > 0$, we have  \[
+		\lim_{n \to \infty} \left( \int_{-r}^r f_n(x) dx \right) = 1 
+	\] 
+In other words, \[
+	\lim_{n \to \infty} \left( \int_{-\infty}^{r} f_n(x) dx + \int_r^{\infty} f_n(x) dx  \right)  = 0
+\] 
+\end{Definition}
+
+\section{distribution}
+
+\begin{Definition}{linear operator}{}
+	If $T:V \to W$ for $V,W$ function spaces, and  $T(c_1f_1+c_2f_2) = c_1T(f_1) + c_2 T(f_2)$ for all $f_1,f_2 \in V$ and $c_1,c_2 \in \R$. Then $T$ is a  \textbf{linear operator}. 
+\end{Definition}
+
+\begin{Definition}{adjoint}{}
+	Suppose that $T: D(\R) \to  D(\R)$ is a linear operator. We say a linear operator $S$ on  $D(\R)$ is the adjoint of  $T$ if  \[
+	\int_{-\infty}^{\infty}(T \psi)(x) \varphi(x) d x=\int_{-\infty}^{\infty} \psi(x)(S \varphi)(x) d x
+	\] 	
+\end{Definition}
+
+\begin{Definition}{tempered distribution}{}
+	A \textbf{tempered distribution} is a continuous linear functional on $S(\R)$ 
+\end{Definition}
+
+
+
+
+\end{document}
